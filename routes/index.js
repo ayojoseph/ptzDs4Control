@@ -15,12 +15,13 @@ atem.connect("192.168.1.215");
 
 // //atem functions
 atem.on("connect", function() {
-  atem.changeProgramInput(5); // ME1(0)
-  atem.changePreviewInput(6); // ME1(0)
-  atem.autoTransition(); // ME1(0)
+  // atem.changeProgramInput(5); // ME1(0)
+  // atem.changePreviewInput(6); // ME1(0)
+  // atem.autoTransition(); // ME1(0)
   atem.changeProgramInput(3, 1); // ME2(1)
 });
-
+var speeds = [1,4,10];
+var speedcount = 0;
 var defaults = {
   ip: camera_ip,
   flip: 1,
@@ -29,9 +30,9 @@ var defaults = {
   infinitypt: 0,
   infinityzoom: 0,
   infinityfocus: 0,
-  panspeed: 20,
+  panspeed: 10,
   zoomspeed: 5,
-  tiltspeed: 20,
+  tiltspeed: 10,
   focusspeed: 3,
   autopaninterval: 60
 };
@@ -205,6 +206,7 @@ function begin() {
   cam_pantilt(1, "home");
 
   gamepad.ondigital = function(button, value) {
+    // console.log(button);
     //DOWN
     if (button == "down") {
       if (value) {
@@ -304,6 +306,20 @@ function begin() {
     if (button == "r3" && value) {
       atem.autoTransition();
     }
+
+    if (button == "ps" && value) {
+      speedcount++;
+      console.log("Speed is now: "+speeds[speedcount%3]);
+      config.panspeed = speeds[speedcount%3];
+      config.tiltspeed = speeds[speedcount%3];
+    }
+
+    //PAD
+    if (button == "pad" && value) {
+      atem.autoDownstreamKey(0);
+      atem.autoDownstreamKey(1);
+    }
+
   };
 
 
